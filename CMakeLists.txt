@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.14)
+include(cmake/prefix.cmake)
+project(sw-ising CXX)
+include(cmake/postfix.cmake)
+
+include_directories(${PROJECT_SOURCE_DIR})
+
+# include(boost)
+include(eigen3)
+include(standards)
+include(lattis)
+FetchContent_MakeAvailable(${FetchContents})
+include_directories(${FetchContent_includes})
+
+set(PROGS ising)
+foreach(name ${PROGS})
+  add_executable(${name} ${name}.cpp)
+  target_link_libraries(${name} lattis standards Eigen3::Eigen)
+  add_test(${name} ${name})
+endforeach(name)
