@@ -40,8 +40,7 @@ using standards::power2;
 using standards::power4;
 
 int main(int argc, char* argv[]) {
-  std::cout << "Swendsen-Wang Algorithm for 2D square-lattice Ising model with anisotropic interaction
-\n";
+  std::cout << "Swendsen-Wang Algorithm for 2D square-lattice Ising model with anisotropic interaction\n";
   options p(argc, argv);
   if (!p.valid) std::exit(127);
   double prob[2] = {1 - std::exp(-2 * p.coupling[0] / p.temperature),
