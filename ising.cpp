@@ -20,10 +20,6 @@
 
 // Swendsen-Wang Algorithm for 2D square-lattice Ising model with anisotropic interaction
 
-#ifndef ALPS_INDEP_SOURCE
-# define ALPS_INDEP_SOURCE
-#endif
-
 #include <algorithm>
 #include <cmath>
 #include <iostream>

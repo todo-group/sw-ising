@@ -1,0 +1,70 @@
+name: Build with system and fetched Eigen3
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-with-apt-eigen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install system Eigen3 and check build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libeigen3-dev
+          cmake --version
+          g++ --version
+          cargo --version
+
+      - name: Configure with system Eigen3
+        run: >-
+          cmake -S . -B build -G "Unix Makefiles"
+          -DCMAKE_BUILD_TYPE=Release
+
+      - name: Verify Eigen3 was not downloaded
+        run: test ! -d build/_deps/eigen3-src
+
+      - name: Build
+        run: cmake --build build --parallel 2
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Remove system Eigen3 and check build tools
+        run: |
+          sudo apt-get remove -y libeigen3-dev
+          cmake --version
+          g++ --version
+          cargo --version
+
+      - name: Configure with Eigen3 package discovery disabled
+        run: >-
+          cmake -S . -B build -G "Unix Makefiles"
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_DISABLE_FIND_PACKAGE_Eigen3=TRUE
+
+      - name: Verify Eigen3 sources were downloaded
+        run: test -f build/_deps/eigen3-src/Eigen/Core
+
+      - name: Build
+        run: cmake --build build --parallel 2
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure

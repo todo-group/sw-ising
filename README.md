@@ -5,8 +5,18 @@ Swendsen-Wang Algorithm for 2D square-lattice Ising model with anisotropic inter
 ## Build
 
 Requirements: CMake 3.14 or later, a C++14 compiler, Make, and Git.
-The lattis dependency also requires Rust/Cargo. Install Eigen3 so CMake can find it.
+The lattis dependency also requires Rust/Cargo.
+If Eigen3 is installed, CMake uses the installed package. Otherwise, CMake
+automatically downloads Eigen3 3.4.0 and creates the `Eigen3::Eigen` target;
+manual installation is optional.
 An internet connection is required to download dependencies during configuration.
+
+On Ubuntu/Debian, Eigen3 can optionally be installed with apt:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y libeigen3-dev
+```
 
 From the repository root, run:
 
